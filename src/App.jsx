@@ -8,10 +8,12 @@ import './App.css'
 const App = () => {
   const [cart, setCart] = useState([]);
   const [couponCode, setCouponCode] = useState('');
+  const [couponCount, setcouponCount] = useState(0);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
     setCart(storedCart);
+    setcouponCount(0)
   }, []);
 
   useEffect(() => {
@@ -37,12 +39,16 @@ const App = () => {
   };
 
   const applyCoupon = () => {
-    if (couponCode === 'WEB3BRIDGECOHORTx') {
-      setCart(cart.map(item => ({ ...item, amount: item.amount * 0.9 })));
-      alert('Coupon applied successfully!');
-    } else {
-      alert('Invalid coupon code');
-    }
+    if (couponCount < 1) {
+      setcouponCount(1)
+      if (couponCode === 'WEB3BRIDGECOHORTx') {
+        setCart(cart.map(item => ({ ...item, amount: item.amount * 0.9 })));
+        alert('Coupon applied successfully!');
+      } else {
+        alert('Invalid coupon code');
+      }
+    }else console.log('Already applied');
+    
   };
 
   const totalAmount = cart.reduce((total, item) => total + item.amount * item.quantity, 0);
